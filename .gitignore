@@ -1,0 +1,18 @@
+# Build outputs
+obj/
+bin/
+
+# Generated images (make run)
+output/
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+.DS_Store
+.vscode/
