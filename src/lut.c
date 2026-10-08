@@ -11,7 +11,8 @@
 lut create_lut(int n){
     lut l;
     l.n = n;
-    l.value = calloc(n,sizeof(int));
+    // apply_lut reads indices 0 to n inclusive, hence n+1 entries.
+    l.value = calloc(n+1,sizeof(int));
     return l;
 }
 

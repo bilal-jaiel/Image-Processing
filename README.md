@@ -44,7 +44,7 @@ point operations, look-up tables, channel operations and interpolated resizing.
 |---|---|
 | Flat pixel buffer | An image is one contiguous byte array (`width × height × channels`); `pixel(...)` computes the byte offset, so every operation is a single loop over memory |
 | Look-up tables | Level quantisation is expressed as a LUT allocated with `calloc` and applied to the whole buffer |
-| Explicit ownership | Every function returns a new `picture` that the caller frees with `clean_picture`; the main program releases each intermediate result |
+| Explicit ownership | Every function returns a new `picture` that the caller frees with `clean_picture`; the main program releases every picture it receives |
 | Melt | At random positions, a pixel is replaced by the one above it when that one is darker; in colour, darkness is the sum of the R, G, B components |
 
 More details on the implementation choices are in the report (French): [`docs/rapport.pdf`](docs/rapport.pdf).
@@ -81,6 +81,7 @@ Each input produces about fifteen files named `<name>_<operation>.<pgm|ppm>` in 
 - Only binary PGM/PPM with 8-bit samples are supported (no ASCII P2/P3, no 16-bit).
 - The mask used by the mixture operation is a hard-coded file name.
 - Some `fgets` / `fread` return values are not checked, so malformed headers are not reported cleanly.
+- Some library functions chain operations on copies (for example `set_levels_picture`) without freeing the intermediate copy, so Valgrind reports memory leaks on `make run`. AddressSanitizer reports no invalid access.
 
 ---
 

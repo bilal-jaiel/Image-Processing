@@ -646,6 +646,9 @@ picture grow_size_bi_linear_interpolation(picture p, double factor){
             // On s'assure que les indices ne dépassent pas les dimensions de l'image originale.
             if (int_x >= p.height) int_x = p.height - 1;
             if (int_y >= p.width) int_y = p.width - 1;
+            // Voisins de droite et du bas, bornés au bord de l'image.
+            int next_x = (int_x + 1 < p.height) ? int_x + 1 : int_x;
+            int next_y = (int_y + 1 < p.width) ? int_y + 1 : int_y;
             // Calcule des coefficients d'interpolation.
             a = x - int_x;
             b = y - int_y;
@@ -654,9 +657,9 @@ picture grow_size_bi_linear_interpolation(picture p, double factor){
             for (int c = 0; c < result.channel; c++) {
                 // Récupération des pixels voisins.
                 p1 = p.tbl[(int_x * p.width + int_y)*p.channel + c];
-                p2 = p.tbl[((int_x+1) * p.width + int_y)*p.channel + c];
-                p3 = p.tbl[(int_x * p.width + (int_y+1))*p.channel + c];
-                p4 = p.tbl[((int_x+1) * p.width + (int_y+1))*p.channel + c];
+                p2 = p.tbl[(next_x * p.width + int_y)*p.channel + c];
+                p3 = p.tbl[(int_x * p.width + next_y)*p.channel + c];
+                p4 = p.tbl[(next_x * p.width + next_y)*p.channel + c];
                 // Initialisation de la valeur du bytes
                 result.tbl[(i * new_width + j)*p.channel + c] = (1-a)*(1-b)*p1 + a*(1-b)*p2 + (1-a)*b*p3 + a*b*p4;
             }
